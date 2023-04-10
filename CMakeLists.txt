@@ -13,7 +13,10 @@ target_include_directories(Faraday PUBLIC "${PROJECT_BINARY_DIR}/include")
 add_executable(Lister "src/lister/lister.c")
 target_include_directories(Lister PUBLIC "${PROJECT_BINARY_DIR}/include")
 
-install(TARGETS Faraday Lister DESTINATION bin)
+add_executable(Compressor "src/compressor/compressor.c")
+target_include_directories(Lister PUBLIC "${PROJECT_BINARY_DIR}/include")
+
+install(TARGETS Faraday Lister Compressor DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/include/config.h"
         DESTINATION include)
 
