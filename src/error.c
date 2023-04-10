@@ -5,14 +5,18 @@
 
 static const char* error_msg[] = {
     "no error",
-    "syntax error"
+    "syntax error",
+    "unterminated string",
+    "reached limit of nested comments",
+    "unknown character found",
+    "double period is not a valid token"
 };
 
 void fatal_error(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
     
-    fprintf(stderr, "\033[0;31mfatal error: \033[0m");
+    fprintf(stderr, "fatal error: ");
     vprintf(fmt, args);
 
     va_end(args);
@@ -23,7 +27,7 @@ void report_warning(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
     
-    fprintf(stdout, "\033[1;33mwarning: \033[0m");    
+    fprintf(stdout, "warning: ");    
     vprintf(fmt, args);
 
     va_end(args);
@@ -33,7 +37,7 @@ void report_error(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
     
-    fprintf(stderr, "\033[0;31merror: \033[0m");    
+    fprintf(stderr, "error: ");    
     vprintf(fmt, args);
 
     va_end(args);
@@ -43,4 +47,8 @@ int error_count = 0;
 void error(ErrorCode code) {
     report_error("%s.\n", error_msg[code]);
     error_count++;
+}
+
+int get_error_count() {
+    return error_count;
 }
