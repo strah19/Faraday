@@ -1,0 +1,1 @@
+#import 6502.util program_addr:=8000;lcd_addr:=7 f00 main:func(){init_stack();lcd_addr[0]=BACKGROUND_INSTRUCTION;init_lcd();run_lcd();}set_begin(program_addr,main);

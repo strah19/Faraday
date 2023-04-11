@@ -11,11 +11,10 @@ char* program_buffer = NULL;
 char* start = NULL;
 char* current = NULL;
 
-void open_source_file(char* filename);
+static void open_source_file(char* filename);
 void load_program_buffer();
 int get_file_size();
 
-Token scan();
 void remove_invalid_text();
 
 bool is_digit(char ch);
@@ -31,7 +30,7 @@ bool match(const char* keyword, int size);
 Token new_string();
 Token string();
 
-void close_source_file();
+static void close_source_file();
 
 //Helper functions
 char peek();
@@ -47,6 +46,10 @@ void init_lexer(char* filename) {
 
     start = current = program_buffer;
     current_line = 1;
+}
+
+FILE* get_lexer_fp() {
+    return source_fp;
 }
 
 void open_source_file(char* filename) {
@@ -73,7 +76,7 @@ void run_lexer() {
     Token token;
     do {
         token = scan();
-        printf("%4d (%d): %.*s\n", token.line, token.code, token.size, token.start);
+        //printf("%4d (%d): %.*s\n", token.line, token.code, token.size, token.start);
     } while(token.code != T_EOF);
 }
 
@@ -114,7 +117,7 @@ void remove_invalid_text() {
                 else if (peek() == '\n')
                     current_line++;      
                 if (nested > NESTED_COMMENTS) {
-                    error(MAX_NESTED_COMMENTS);
+                    error(MAX_NESTED_COMMENTS, current_line);
                     return;         
                 }
                 advance();
@@ -227,14 +230,14 @@ Token single_character(char ch) {
     case '"': return string();
     case '.': {
         if (check('.') && !check('.')) {
-            error(DOUBLE_PERIOD);
+            error(DOUBLE_PERIOD, current_line);
             return new_token(T_NO_TOKEN);
         }
         if (check('.')) return new_token(T_ARGS); //This means that there are three dots, not just two
         else return new_token(T_PERIOD);
     }
     default:
-        error(UNKNOWN_CHAR);
+        error(UNKNOWN_CHAR, current_line);
         return new_token(T_NO_TOKEN);
     }
 }
@@ -246,7 +249,7 @@ Token string() {
         advance();
     }
     if (is_eof())
-        error(UNTERMINATING_STR);
+        error(UNTERMINATING_STR, current_line);
     advance();
     return new_string();
 }

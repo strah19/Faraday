@@ -12,7 +12,7 @@ void report_warning(const char* fmt, ...);
 
 void report_error(const char* fmt, ...);
 
-void error(ErrorCode code);
+void error(ErrorCode code, int line);
 
 int get_error_count();
 

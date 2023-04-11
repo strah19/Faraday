@@ -44,8 +44,8 @@ void report_error(const char* fmt, ...) {
 }
 
 int error_count = 0;
-void error(ErrorCode code) {
-    report_error("%s.\n", error_msg[code]);
+void error(ErrorCode code, int line) {
+    report_error("%s at line %d.\n", error_msg[code], line);
     error_count++;
 }
 

@@ -34,7 +34,11 @@ typedef struct {
 
 void init_lexer(char* filename);
 
+Token scan();
+
 void run_lexer();
+
+FILE* get_lexer_fp();
 
 void destroy_lexer();
 

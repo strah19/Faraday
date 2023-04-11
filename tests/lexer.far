@@ -1,66 +1,17 @@
-#include "common.h"
-#include <time.h>
+//LCD display driver
+#import "6502.util"
 
-#define MAX_LINES_PER_PAGE 50
-#define FORMAT_LENGTH 9
-#define DATE_STR_LENGTH 26
+//Memory Map
+program_addr := 8000;
+lcd_addr := 7f00
 
-FILE* source = NULL;
+main : func () {
+    init_stack();
 
-int main(int argc, char* argv[]) {
-    printf("Faraday %d.%d\n", FARADAY_VERSION_MAJOR, FARADAY_VERSION_MINOR);
+    lcd_addr[0] = BACKGROUND_INSTRUCTION;
+    init_lcd();
 
-    source = fopen(argv[1], "r");
-    if (!source) {
-        exit(EXIT_FAILURE);
-    }
-
-    char date[DATE_STR_LENGTH];
-    time_t timer;
-    time(&timer);
-    strcpy(date, asctime(localtime(&timer)));
-
-    char source_name[MAX_FILE_NAME_LENGTH];
-    strcpy(source_name, argv[1]);
-
-    char source_buffer[MAX_LINE_LENGTH];
-    char print_buffer[MAX_LINE_LENGTH + FORMAT_LENGTH];
-
-    int line_number = 0;
-    int page_line_number = 50;
-    int page_number = 0;
-    int nesting_level = 0;
-
-    while (fgets(source_buffer, MAX_LINE_LENGTH, source) != NULL) {
-        line_number++;
-
-        if (++page_line_number > MAX_LINES_PER_PAGE) {
-            page_line_number = 1;
-            page_number++;
-            printf("Page %d   %s  %s", page_number, source_name, date);
-        }
-
-        char* save_chp = source_buffer; //Max save_chp = MAX_PRINT_LINE - FORMAT_LENGTH
-        char save_ch;
-        save_ch = save_chp[MAX_PRINT_LINE - FORMAT_LENGTH];
-        int inner_lines = 0;
-
-        do {
-            if (inner_lines > 0)
-                printf("\n");
-            sprintf(print_buffer, "%4d %d: %s", line_number, nesting_level, save_chp);
-            printf("%s", print_buffer);
-
-            save_chp = save_chp + MAX_PRINT_LINE - FORMAT_LENGTH; 
-            *save_chp = save_ch;
-
-            save_ch = save_chp[MAX_PRINT_LINE - FORMAT_LENGTH];
-            inner_lines++;
-        } while(save_chp < source_buffer + strlen(source_buffer));   
-    }
-
-    printf("\n");
-    fclose(source);
-
-    return 0;
+    run_lcd();
 }
+
+set_begin(program_addr, main);
