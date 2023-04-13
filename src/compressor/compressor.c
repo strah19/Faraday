@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     int new_size = ftell(compressed_file);
 
     fclose(compressed_file);
-    free(compressed_buffer);
+    dealloc(compressed_buffer);
 
     float fractional = (float) new_size / (float) size;
 

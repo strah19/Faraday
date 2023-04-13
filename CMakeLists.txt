@@ -14,9 +14,16 @@ add_executable(Lister ${SOURCES} "src/lister/lister.c")
 target_include_directories(Lister PUBLIC "${PROJECT_BINARY_DIR}/include")
 
 add_executable(Compressor ${SOURCES} "src/compressor/compressor.c")
-target_include_directories(Lister PUBLIC "${PROJECT_BINARY_DIR}/include")
+target_include_directories(Compressor PUBLIC "${PROJECT_BINARY_DIR}/include")
 
-install(TARGETS Faraday Lister Compressor DESTINATION bin)
+add_executable(CrossReferencer ${SOURCES} "src/cross_referencer/cross_referencer.c")
+target_include_directories(CrossReferencer PUBLIC "${PROJECT_BINARY_DIR}/include")
+
+add_executable(Cruncher ${SOURCES} "src/cruncher/cruncher.c")
+target_include_directories(Cruncher PUBLIC "${PROJECT_BINARY_DIR}/include")
+
+
+install(TARGETS Faraday Lister Compressor CrossReferencer Cruncher DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/include/config.h"
         DESTINATION include)
 

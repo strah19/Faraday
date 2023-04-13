@@ -88,8 +88,6 @@ void close_source_file() {
 }
 
 int main(int argc, char* argv[]) {
-    printf("Faraday Lister %d.%d\n", FARADAY_VERSION_MAJOR, FARADAY_VERSION_MINOR);
-
     init_lister(argv[1]);
 
     list();

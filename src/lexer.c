@@ -76,7 +76,7 @@ void run_lexer() {
     Token token;
     do {
         token = scan();
-        //printf("%4d (%d): %.*s\n", token.line, token.code, token.size, token.start);
+        printf("%4d (%d): %.*s\n", token.line, token.code, token.size, token.start);
     } while(token.code != T_EOF);
 }
 
@@ -301,7 +301,7 @@ bool is_eof() {
 
 void destroy_lexer() {
     close_source_file();
-    free(program_buffer);
+    dealloc(program_buffer);
 }
 
 void close_source_file() {
