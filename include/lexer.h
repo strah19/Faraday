@@ -24,6 +24,21 @@ typedef enum {
     T_EOF, T_NO_TOKEN
 } TokenCode;
 
+static const char* token_str[] = {
+    "+", "-", "*", "/", "(", ")", "{", "}", 
+    ";", ":", "!", "&", "#", "=", 
+    "<", ">", "|", "[", "]", "%", "~",
+    "^", ",", ".",
+
+    "!=", "<=", ">=", "==", "<<", ">>", ":=",
+    "+=", "-=", "*=", "/=", "->",
+    "...",
+
+    "if", "elif", "else", "for", "while", "break", "return", "int", "boolean",
+    "char", "string", "float", "and", "or", "true", "false", "print",
+    "cast"
+};
+
 typedef struct {
     int size;
     int line;

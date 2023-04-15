@@ -8,6 +8,10 @@ line->head = line->tail = NULL;
 node->info = (char*) line;
 }
 
+void(int i ) {
+    
+}
+
 LineInfo* line_info = alloc_struct(LineInfo);
 line_info->next = NULL;
 line_info->line = token.line;

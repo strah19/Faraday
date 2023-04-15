@@ -6,6 +6,7 @@
 #define UNDEFINED_TOKEN 0
 #define SPACE_TOKEN 1
 #define CLOSE_TOKEN 2
+#define EOF_VAL 26
 
 //TODO: Compressor could also get rid of comments...
 int main(int argc, char* argv[]) {
@@ -41,6 +42,7 @@ int main(int argc, char* argv[]) {
             compressed_buffer[index++] = token.start[i];
         }
     } while(token.code != T_EOF);
+    compressed_buffer[index] = EOF_VAL;
 
     destroy_lexer();
 

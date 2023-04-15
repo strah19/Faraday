@@ -45,10 +45,6 @@ int main(int argc, char* argv[]) {
         }
     } while(token.code != T_EOF);
 
-    for (int i = 0; i < token_count; i++) {
-        printf("%d\n", byte_code[i]);
-    }
-
     char output_file_name[MAX_FILE_NAME_LENGTH + 4];
     strcpy(output_file_name, argv[1]);
     strcat(output_file_name, ".cru");
@@ -74,10 +70,10 @@ void write_symbol_table(Symbol* root) {
 
     write_symbol_table(root->left);
 
-    int len = strlen(root->name);
-    fwrite(&len, sizeof(short), 1, output_file);
+    int len = strlen(root->name) + 1;
+    fwrite(&len, sizeof(char), 1, output_file);
     fwrite(root->name, len, 1, output_file);
-    fwrite(&root->defn.info.constant.val.integer, sizeof(short), 1, output_file);
+    fwrite(&root->defn.info.constant.val.integer, sizeof(char), 1, output_file);
 
     write_symbol_table(root->right);
 }

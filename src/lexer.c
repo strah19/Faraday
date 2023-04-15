@@ -147,10 +147,15 @@ Token new_token(TokenCode code) {
     token.line = current_line;
     token.start = start;
     token.size = (int) (current - start);
-    
-    token.str = alloc_string(token.size + 1);
-    memset(token.str, '\0', token.size + 1);
-    strncpy(token.str, token.start, token.size);
+
+    if (token.code <= T_ARGS) {
+        token.str = (char*) token_str[token.code];
+    }
+    else if (token.code != T_EOF) {
+        token.str = alloc_string(token.size + 1);
+        memset(token.str, '\0', token.size + 1);
+        strncpy(token.str, token.start, token.size);
+    }
 
     return token;
 }
