@@ -7,25 +7,47 @@ FILE* output_file = NULL;
 
 void write_symbol_table(Symbol* root);
 
-int main (int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     init_lexer(argv[1]);
     
     Symbol* root = NULL;
 
+    int token_count = 0;
+    int symbol_index = 0;
     Token token;
     do {
         token = scan();
 
         if (token.code == T_IDENTIFIER || token.code == T_INT_CONST || token.code == T_FLOAT_CONST || token.code == T_STRING_CONST) {
-            char* id_name = alloc_string(token.size + 1);
-            memset(id_name, '\0', token.size + 1);
-            strncpy(id_name, token.start, token.size);
-            Symbol* node = search_symbol_table(id_name, root);       
+            Symbol* node = search_symbol_table(token.str, root);       
             if (node == NULL) {
-                node = enter_symbol(id_name, &root);
+                node = enter_symbol(token.str, &root);
+                node->defn.info.constant.val.integer = symbol_index++;
             }
+            token_count++;
+        }
+        token_count++;
+    } while(token.code != T_EOF);
+
+    reset_lexer();
+
+    int byte_index = 0;
+    char* byte_code = alloc_array(char, token_count);
+    do {
+        token = scan(); 
+        byte_code[byte_index++] = token.code;
+        if (token.code == T_IDENTIFIER || token.code == T_INT_CONST || token.code == T_FLOAT_CONST || token.code == T_STRING_CONST) {
+            Symbol* node = search_symbol_table(token.str, root);       
+            if (node == NULL) {
+                printf("Unidentified symbol '%s' found in second pass.\n", token.str);
+            }
+            byte_code[byte_index++] = node->defn.info.constant.val.integer;
         }
     } while(token.code != T_EOF);
+
+    for (int i = 0; i < token_count; i++) {
+        printf("%d\n", byte_code[i]);
+    }
 
     char output_file_name[MAX_FILE_NAME_LENGTH + 4];
     strcpy(output_file_name, argv[1]);
@@ -35,7 +57,9 @@ int main (int argc, char* argv[]) {
         fprintf(stderr, "Failed to open file '%s'.\n", output_file_name);
         exit(EXIT_FAILURE);
     }
+    fwrite(&symbol_index, sizeof(short), 1, output_file);
     write_symbol_table(root);
+    fwrite(byte_code, sizeof(char) * token_count, 1, output_file);
 
     printf("lexer finished with %d error%s.\n", get_error_count(), ((get_error_count() == 1) ? "" : "s"));
 
@@ -45,15 +69,15 @@ int main (int argc, char* argv[]) {
     return 0;
 }
 
-int symbol_index = 0;
 void write_symbol_table(Symbol* root) {
     if (root == NULL) return;
 
     write_symbol_table(root->left);
 
-    fwrite(root->name, strlen(root->name) + 1, 1, output_file);
-    fwrite(&symbol_index, sizeof(int), 1, output_file);
-    symbol_index++;
+    int len = strlen(root->name);
+    fwrite(&len, sizeof(short), 1, output_file);
+    fwrite(root->name, len, 1, output_file);
+    fwrite(&root->defn.info.constant.val.integer, sizeof(short), 1, output_file);
 
     write_symbol_table(root->right);
 }

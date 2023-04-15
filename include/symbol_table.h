@@ -26,7 +26,7 @@ typedef struct Symbol Symbol;
 struct Symbol {
     Symbol* left;
     Symbol* right;
-    SymbolDefinition* defn;
+    SymbolDefinition defn;
     char* name;
     char* info;
 };

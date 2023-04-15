@@ -48,6 +48,11 @@ void init_lexer(char* filename) {
     current_line = 1;
 }
 
+void reset_lexer() {
+    start = current = program_buffer;
+    current_line = 1;   
+}
+
 FILE* get_lexer_fp() {
     return source_fp;
 }
@@ -142,6 +147,11 @@ Token new_token(TokenCode code) {
     token.line = current_line;
     token.start = start;
     token.size = (int) (current - start);
+    
+    token.str = alloc_string(token.size + 1);
+    memset(token.str, '\0', token.size + 1);
+    strncpy(token.str, token.start, token.size);
+
     return token;
 }
 
@@ -261,6 +271,10 @@ Token new_string() {
     token.line = current_line;
     token.start = start + 1;
     token.size = (int) (current - start - 2);
+
+    token.str = alloc_string(token.size + 1);
+    memset(token.str, '\0', token.size + 1);
+    strncpy(token.str, token.start, token.size);
 
     return token;
 }

@@ -14,7 +14,7 @@ Symbol* enter_symbol(char* name, Symbol** root) {
     Symbol* new_node = alloc_struct(Symbol);
     new_node->name = name;
     new_node->left = new_node->right = NULL;
-    new_node->defn = UNDEFINED;
+    new_node->defn.key = UNDEFINED;
     new_node->info = NULL;
 
     Symbol* test_node;

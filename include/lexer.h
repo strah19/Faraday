@@ -28,11 +28,14 @@ typedef struct {
     int size;
     int line;
     char* start;
+    char* str;
 
     TokenCode code;
 } Token;
 
 void init_lexer(char* filename);
+
+void reset_lexer();
 
 Token scan();
 
