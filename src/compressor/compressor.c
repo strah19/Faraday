@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
             compressed_buffer[index++] = token.start[i];
         }
     } while(token.code != T_EOF);
-    compressed_buffer[index] = EOF_VAL;
+    //compressed_buffer[index] = EOF_VAL;
 
     destroy_lexer();
 

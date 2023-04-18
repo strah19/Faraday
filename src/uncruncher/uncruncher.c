@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
             need_space += 1;
         current_size += len;
     }
-    output_buffer[current_size++] = EOF_VAL;
+    //output_buffer[current_size++] = EOF_VAL;
 
     char uncrunched_file_name[MAX_FILE_NAME_LENGTH];
     strncpy(uncrunched_file_name, argv[1], strlen(argv[1]) - 4);
