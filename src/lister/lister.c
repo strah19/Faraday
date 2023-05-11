@@ -3,7 +3,6 @@
 
 #define MAX_LINES_PER_PAGE 50
 #define FORMAT_LENGTH 9
-#define DATE_STR_LENGTH 26
 
 /* Globals */
 FILE* source = NULL;

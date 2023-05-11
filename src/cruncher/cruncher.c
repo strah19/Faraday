@@ -2,6 +2,7 @@
 #include "lexer.h"
 #include "error.h"
 #include "symbol_table.h"
+#include "utility.h"
 
 FILE* output_file = NULL;
 
@@ -19,9 +20,10 @@ int main(int argc, char* argv[]) {
         token = scan();
 
         if (token.code == T_IDENTIFIER || token.code == T_INT_CONST || token.code == T_FLOAT_CONST || token.code == T_STRING_CONST) {
-            Symbol* node = search_symbol_table(token.str, root);       
+            char* token_str = create_string(token.start, token.size);
+            Symbol* node = search_symbol_table(token_str, root);       
             if (node == NULL) {
-                node = enter_symbol(token.str, &root);
+                node = enter_symbol(token_str, &root);
                 node->defn.info.constant.val.integer = symbol_index++;
             }
             token_count++;
@@ -37,10 +39,12 @@ int main(int argc, char* argv[]) {
         token = scan(); 
         byte_code[byte_index++] = token.code;
         if (token.code == T_IDENTIFIER || token.code == T_INT_CONST || token.code == T_FLOAT_CONST || token.code == T_STRING_CONST) {
-            Symbol* node = search_symbol_table(token.str, root);       
+            char* token_str = create_string(token.start, token.size);
+            Symbol* node = search_symbol_table(token_str, root);       
             if (node == NULL) {
-                printf("Unidentified symbol '%s' found in second pass.\n", token.str);
+                printf("Unidentified symbol '%s' found in second pass.\n", token_str);
             }
+            dealloc(token_str);
             byte_code[byte_index++] = node->defn.info.constant.val.integer;
         }
     } while(token.code != T_EOF);

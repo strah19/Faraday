@@ -48,6 +48,13 @@ void init_lexer(char* filename) {
     current_line = 1;
 }
 
+void init_lexer_with_buffer(char* buffer) {
+    program_buffer = buffer;
+    
+    start = current = program_buffer;
+    current_line = 1;
+}
+
 void reset_lexer() {
     start = current = program_buffer;
     current_line = 1;   
@@ -81,8 +88,12 @@ void run_lexer() {
     Token token;
     do {
         token = scan();
-        printf("%4d (%d): %.*s\n", token.line, token.code, token.size, token.start);
+        print_token(token);
     } while(token.code != T_EOF);
+}
+
+void print_token(Token token) {
+    printf("%4d (%d): %.*s\n", token.line, token.code, token.size, token.start);
 }
 
 Token scan() {
@@ -142,20 +153,11 @@ bool is_letter(char ch) {
 }
 
 Token new_token(TokenCode code) {
-    Token token;
+    Token token;   
     token.code = code;
-    token.line = current_line;
+    token.line = current_line; 
     token.start = start;
-    token.size = (int) (current - start);
-
-    if (token.code <= T_ARGS) {
-        token.str = (char*) token_str[token.code];
-    }
-    else if (token.code != T_EOF) {
-        token.str = alloc_string(token.size + 1);
-        memset(token.str, '\0', token.size + 1);
-        strncpy(token.str, token.start, token.size);
-    }
+    token.size = (int) (current - start); 
 
     return token;
 }
@@ -276,10 +278,6 @@ Token new_string() {
     token.line = current_line;
     token.start = start + 1;
     token.size = (int) (current - start - 2);
-
-    token.str = alloc_string(token.size + 1);
-    memset(token.str, '\0', token.size + 1);
-    strncpy(token.str, token.start, token.size);
 
     return token;
 }

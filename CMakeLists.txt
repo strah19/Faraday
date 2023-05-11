@@ -25,7 +25,10 @@ target_include_directories(Cruncher PUBLIC "${PROJECT_BINARY_DIR}/include")
 add_executable(Uncruncher ${SOURCES} "src/uncruncher/uncruncher.c")
 target_include_directories(Uncruncher PUBLIC "${PROJECT_BINARY_DIR}/include")
 
-install(TARGETS Faraday Lister Compressor CrossReferencer Cruncher Uncruncher DESTINATION bin)
+add_executable(Calculator ${SOURCES} "src/calculator/calculator.c")
+target_include_directories(Uncruncher PUBLIC "${PROJECT_BINARY_DIR}/include")
+
+install(TARGETS Faraday Lister Compressor CrossReferencer Cruncher Uncruncher Calculator DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/include/config.h"
         DESTINATION include)
 

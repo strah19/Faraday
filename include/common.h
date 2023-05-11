@@ -15,5 +15,6 @@
 #define MAX_LINE_LENGTH 512
 #define MAX_PRINT_LINE 80
 #define MAX_FILE_NAME_LENGTH 256
+#define DATE_STR_LENGTH 32
 
 #endif 

@@ -20,7 +20,7 @@ typedef enum {
     T_CHAR, T_STRING, T_FLOAT, T_AND, T_OR, T_TRUE, T_FALSE, T_PRINT,
     T_CAST,
 
-    T_IDENTIFIER, T_INT_CONST, T_FLOAT_CONST, T_BINARY_CONST, T_STRING_CONST, T_CHAR_CONST,
+    T_IDENTIFIER, T_INT_CONST, T_FLOAT_CONST, T_BINARY_CONST, T_STRING_CONST,
     T_EOF, T_NO_TOKEN
 } TokenCode;
 
@@ -43,16 +43,19 @@ typedef struct {
     int size;
     int line;
     char* start;
-    char* str;
 
     TokenCode code;
 } Token;
 
 void init_lexer(char* filename);
 
+void init_lexer_with_buffer(char* buffer);
+
 void reset_lexer();
 
 Token scan();
+
+void print_token(Token token);
 
 void run_lexer();
 
